@@ -1,0 +1,22 @@
+{
+  "name": "hardnosed-closure",
+  "version": "1.0.0",
+  "description": "Run google closure compiler with with serious business options enabled",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DamonOehlman/hardnosed-closure.git"
+  },
+  "keywords": [
+    "closure-compiler"
+  ],
+  "author": "Damon Oehlman <damon.oehlman@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DamonOehlman/hardnosed-closure/issues"
+  },
+  "homepage": "https://github.com/DamonOehlman/hardnosed-closure#readme"
+}
