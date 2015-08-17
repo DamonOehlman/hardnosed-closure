@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Run google closure compiler with with serious business options enabled",
   "main": "index.js",
+  "bin": {
+    "hardnosed-closure": "hardnosed-closure.sh"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/DamonOehlman/hardnosed-closure/issues"
   },
-  "homepage": "https://github.com/DamonOehlman/hardnosed-closure#readme"
+  "homepage": "https://github.com/DamonOehlman/hardnosed-closure#readme",
+  "dependencies": {
+    "google-closure-compiler": "^20150729.0.0"
+  }
 }
