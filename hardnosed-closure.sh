@@ -5,6 +5,8 @@ set -uo pipefail
 shopt -s nullglob
 IFS=$'\n\t'
 
+CLOSURE_RELEASE="20160208"
+
 # define the --jscomp_error flags we want to use
 JSCOMP_ERRORS=(
 	accessControls
@@ -46,5 +48,20 @@ function genClosureArgs() {
 	echo "${ARGS[*]}"
 }
 
-hash "java" || (echo "you need java installed to run closure compiler, sorry :("; exit 1;)
-java -jar node_modules/google-closure-compiler/compiler.jar $(genClosureArgs) $@
+checkJava() {
+  hash "java" || (echo "you need java installed to run closure compiler, sorry :("; exit 1;)
+}
+
+installCompiler() {
+  if [ ! -f ./compiler.jar ]; then
+    echo "downloading the ${CLOSURE_RELEASE} version of closure compiler"
+    curl "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz" | tar -xz --include="compiler.jar"
+  fi
+}
+
+main() {
+  checkJava && installCompiler
+  java -jar compiler.jar $(genClosureArgs) $@
+}
+
+main "$@"
