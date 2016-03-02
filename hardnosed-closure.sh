@@ -6,6 +6,7 @@ shopt -s nullglob
 IFS=$'\n\t'
 
 CLOSURE_RELEASE="20160208"
+DIR=$(dirname "$0")
 
 # define the --jscomp_error flags we want to use
 JSCOMP_ERRORS=(
@@ -53,15 +54,15 @@ checkJava() {
 }
 
 installCompiler() {
-  if [ ! -f ./compiler.jar ]; then
+  if [ ! -f "${DIR}/compiler.jar" ]; then
     echo "downloading the ${CLOSURE_RELEASE} version of closure compiler"
-    curl "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz" | tar -xz --include="compiler.jar"
+    curl "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz" | tar -xz --include="compiler.jar" -c "${DIR}"
   fi
 }
 
 main() {
   checkJava && installCompiler
-  java -jar compiler.jar $(genClosureArgs) $@
+  java -jar "${DIR}/compiler.jar" $(genClosureArgs) $@
 }
 
 main "$@"
