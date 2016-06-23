@@ -1,0 +1,8 @@
+test/inputs/simple-static-typed-invalid.es6:4: ERROR - Returned type does not match declared return type.
+declared : number
+found    : string
+
+    return "hello";
+    ^
+
+1 error(s), 0 warning(s)
