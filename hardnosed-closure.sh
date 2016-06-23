@@ -33,17 +33,18 @@ JSCOMP_WARNINGS=(
 
 function genClosureArgs() {
 	ARGS=()
-	for flag in ${JSCOMP_ERRORS[@]}; do
+	for flag in "${JSCOMP_ERRORS[@]}"; do
 		ARGS+=(--jscomp_error $flag)
 	done
 
-	for flag in ${JSCOMP_WARNINGS[@]}; do
+	for flag in "${JSCOMP_WARNINGS[@]}"; do
 		ARGS+=(--jscomp_warning $flag)
 	done
 
 	ARGS+=(--language_in ECMASCRIPT6)
 	ARGS+=(--charset UTF-8)
 	ARGS+=(--warning_level VERBOSE)
+	ARGS+=(--new_type_inf)
 	ARGS+=(--summary_detail_level 3)
 	ARGS+=(--compilation_level ADVANCED_OPTIMIZATIONS)
 
