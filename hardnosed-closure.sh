@@ -7,6 +7,7 @@ IFS=$'\n\t'
 
 CLOSURE_RELEASE="20160208"
 DIR=$(dirname "$0")
+CC_RELEASES_DIR="${DIR}"/cc-releases
 
 # define the --jscomp_error flags we want to use
 JSCOMP_ERRORS=(
@@ -54,10 +55,13 @@ checkJava() {
 }
 
 installCompiler() {
-  if [ ! -f "${DIR}/compiler.jar" ]; then
-    echo "downloading the ${CLOSURE_RELEASE} version of closure compiler"
-    curl "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz" | tar -xz --include="compiler.jar" -c "${DIR}"
-  fi
+	mkdir -p "${CC_RELEASES_DIR}"
+	if [ ! -f "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" ]; then
+		echo "downloading the ${CLOSURE_RELEASE} version of closure compiler"
+		wget --quiet --directory-prefix="${CC_RELEASES_DIR}" "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz"
+
+		tar xzf "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" --include="compiler.jar"
+	fi
 }
 
 main() {
