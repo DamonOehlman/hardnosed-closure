@@ -8,6 +8,7 @@ IFS=$'\n\t'
 CLOSURE_RELEASE="20160208"
 DIR=$(dirname "$0")
 CC_RELEASES_DIR="${DIR}"/cc-releases
+INSTALL_ONLY=0
 
 # define the --jscomp_error flags we want to use
 JSCOMP_ERRORS=(
@@ -55,19 +56,38 @@ checkJava() {
   hash "java" || (echo "you need java installed to run closure compiler, sorry :("; exit 1;)
 }
 
-installCompiler() {
+maybeDownloadCompiler() {
 	mkdir -p "${CC_RELEASES_DIR}"
 	if [ ! -f "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" ]; then
-		echo "downloading the ${CLOSURE_RELEASE} version of closure compiler"
-		wget --quiet --directory-prefix="${CC_RELEASES_DIR}" "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz"
+		echo "downloading closure release ${CLOSURE_RELEASE}"
+		wget --quiet --directory-prefix="${CC_RELEASES_DIR}" "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz";
+		extractCompiler
+	fi
 
-		tar xzf "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" --include="compiler.jar"
+	if [ ! -f "${CC_RELEASES_DIR}/compiler.jar" ]; then
+		extractCompiler
 	fi
 }
 
-main() {
-  checkJava && installCompiler
-  java -jar "${DIR}/compiler.jar" $(genClosureArgs) $@
+extractCompiler() {
+	echo "extracting compiler"
+	tar xzf "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" -C "${CC_RELEASES_DIR}"
 }
+
+main() {
+  checkJava && maybeDownloadCompiler
+
+	if [ "${INSTALL_ONLY}" != 1 ]; then
+		java -jar "${CC_RELEASES_DIR}/compiler.jar" $(genClosureArgs) $@
+	fi
+}
+
+while getopts ":install:" opt; do
+	case $opt in
+		i|install)
+			INSTALL_ONLY=1
+			;;
+	esac
+done
 
 main "$@"

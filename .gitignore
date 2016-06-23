@@ -1,5 +1,4 @@
 cc-releases/
 test/compile.log
 test/output.js
-compiler.jar
 node_modules
