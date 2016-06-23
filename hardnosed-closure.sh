@@ -41,7 +41,7 @@ function genClosureArgs() {
 		ARGS+=(--jscomp_warning $flag)
 	done
 
-	ARGS+=(--language_in ECMASCRIPT5)
+	ARGS+=(--language_in ECMASCRIPT6)
 	ARGS+=(--charset UTF-8)
 	ARGS+=(--warning_level VERBOSE)
 	ARGS+=(--summary_detail_level 3)
