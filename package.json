@@ -1,6 +1,6 @@
 {
   "name": "hardnosed-closure",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Run google closure compiler with with serious business options enabled",
   "main": "index.js",
   "bin": {
