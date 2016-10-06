@@ -5,7 +5,7 @@ set -uo pipefail
 shopt -s nullglob
 IFS=$'\n\t'
 
-CLOSURE_RELEASE="20160208"
+CLOSURE_RELEASE="20160911"
 DIR=$(dirname "$0")
 CC_RELEASES_DIR="${DIR}"/cc-releases
 INSTALL_ONLY=0
@@ -15,16 +15,23 @@ JSCOMP_ERRORS=(
 	accessControls
 	checkRegExp
 	checkTypes
+	newCheckTypes
 	uselessCode
 	checkVars
 	const
 	globalThis
+	invalidCasts
+	typeInvalidation
 	nonStandardJsDocs
 	missingProperties
 	strictModuleDepCheck
 	suspiciousCode
 	undefinedNames
 	visibility
+)
+
+JSCOMP_ERRORS_ULTRASTRICT=(
+	reportUnknownTypes # not generally recommended as closures type inference is crap
 )
 
 # define the --jscomp_warning flags
@@ -58,27 +65,31 @@ checkJava() {
 
 maybeDownloadCompiler() {
 	mkdir -p "${CC_RELEASES_DIR}"
-	if [ ! -f "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" ]; then
+	if [[ ! -f "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" ]]; then
 		echo "downloading closure release ${CLOSURE_RELEASE}"
 		wget --quiet --directory-prefix="${CC_RELEASES_DIR}" "http://dl.google.com/closure-compiler/compiler-${CLOSURE_RELEASE}.tar.gz";
 		extractCompiler
 	fi
 
-	if [ ! -f "${CC_RELEASES_DIR}/compiler.jar" ]; then
+	if [[ ! -d "${CC_RELEASES_DIR}/${CLOSURE_RELEASE}" ]]; then
 		extractCompiler
 	fi
 }
 
 extractCompiler() {
 	echo "extracting compiler"
-	tar xzf "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" -C "${CC_RELEASES_DIR}"
+	mkdir -p "${CC_RELEASES_DIR}/${CLOSURE_RELEASE}"
+	tar xzf "${CC_RELEASES_DIR}/compiler-${CLOSURE_RELEASE}.tar.gz" -C "${CC_RELEASES_DIR}/${CLOSURE_RELEASE}"
 }
 
 main() {
-  checkJava && maybeDownloadCompiler
+    local compiler_path
 
+    checkJava && maybeDownloadCompiler
+
+    compiler_path=$(find "${CC_RELEASES_DIR}/${CLOSURE_RELEASE}" -iname "*.jar")
 	if [ "${INSTALL_ONLY}" != 1 ]; then
-		java -jar "${CC_RELEASES_DIR}/compiler.jar" $(genClosureArgs) $@
+		java -jar "${compiler_path}" $(genClosureArgs) "$@"
 	fi
 }
 
