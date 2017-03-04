@@ -5,7 +5,7 @@ set -uo pipefail
 shopt -s nullglob
 IFS=$'\n\t'
 
-CLOSURE_RELEASE="20160911"
+CLOSURE_RELEASE="20170218"
 DIR=$(dirname "$0")
 CC_RELEASES_DIR="${DIR}"/cc-releases
 INSTALL_ONLY=0

@@ -3,6 +3,6 @@ Expected : number
 Found    : string
 
     return "hello";
-    ^
+    ^^^^^^^^^^^^^^^
 
 1 error(s), 0 warning(s)
